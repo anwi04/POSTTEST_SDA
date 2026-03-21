@@ -105,41 +105,6 @@ void sortID(Hewan *arr){
     }
 }
 
-int fibSearch(Hewan *arr, int x) {
-    sortID(arr);
-
-    int f2 = 0, f1 = 1, f = f2 + f1;
-    while(f < n) {
-        f2 = f1;
-        f1 = f;
-        f = f2 + f1;
-    }
-
-    int offset = -1;
-
-    while(f > 1) {
-        int i = min(offset + f2, n - 1);
-
-        if((arr+i)->id < x) {
-            f = f1;
-            f1 = f2;
-            f2 = f - f1;
-            offset = i;
-        }
-        else if((arr+i)->id > x) {
-            f = f2;
-            f1 = f1 - f2;
-            f2 = f - f1;
-        }
-        else return i;
-    }
-
-    if(f1 && (arr+offset+1)->id == x)
-        return offset + 1;
-
-    return -1;
-}
-
 int binarySearch(Hewan *arr, int x) {
     sortID(arr);
 
@@ -157,6 +122,13 @@ int binarySearch(Hewan *arr, int x) {
     }
     return -1;
 }
+// PROSES ITERASI:
+// 1. Data diurutkan dulu berdasarkan ID
+// 2. Tentukan index tengah
+// 3. Bandingkan ID tengah dengan yang dicari
+// 4. Jika lebih kecil → geser ke kanan
+// 5. Jika lebih besar → geser ke kiri
+// 6. Ulangi sampai ketemu atau tidak ditemukan
 
 void bubbleSort(Hewan *arr) {
     for(int i = 0; i < n - 1; i++) {
@@ -190,11 +162,10 @@ int main() {
         cout << "1. Tambah Data" << endl;
         cout << "2. Tampil Data" << endl;
         cout << "3. Cari Nama" << endl;
-        cout << "4. Cari ID" << endl;
-        cout << "5. Sort Nama" << endl;
-        cout << "6. Sort Harga" << endl;
-        cout << "7. Binary Search ID" << endl;
-        cout << "8. Keluar" << endl;
+        cout << "4. Sort Nama" << endl;
+        cout << "5. Sort Harga" << endl;
+        cout << "6. Binary Search ID" << endl;
+        cout << "7. Keluar" << endl;
         cout << "Pilih: ";
 
         if(!(cin >> pil)){
@@ -204,7 +175,7 @@ int main() {
             continue;
         }
 
-        if(pil < 1 || pil > 8){
+        if(pil < 1 || pil > 7){
             cout << "Pilihan tidak valid!" << endl;
         }
         else if(pil == 1) {
@@ -222,21 +193,12 @@ int main() {
             linearSearch(daftarHewan, x);
         }
         else if(pil == 4) {
-            int id;
-            cout << "ID: "; cin >> id;
-            int hasil = fibSearch(daftarHewan, id);
-            if(hasil != -1)
-                cout << "Ditemukan di index " << hasil << endl;
-            else
-                cout << "Tidak ditemukan" << endl;
-        }
-        else if(pil == 5) {
             bubbleSort(daftarHewan);
         }
-        else if(pil == 6) {
+        else if(pil == 5) {
             selectionSort(daftarHewan);
         }
-        else if(pil == 7) {
+        else if(pil == 6) {
             int id;
             cout << "ID: "; cin >> id;
             int hasil = binarySearch(daftarHewan, id);
@@ -246,7 +208,7 @@ int main() {
                 cout << "Tidak ditemukan" << endl;
         }
 
-    } while(pil != 8);
+    } while(pil != 7);
 
     return 0;
 }
