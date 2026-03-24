@@ -126,8 +126,8 @@ int binarySearch(Hewan *arr, int x) {
 // 1. Data diurutkan dulu berdasarkan ID
 // 2. Tentukan index tengah
 // 3. Bandingkan ID tengah dengan yang dicari
-// 4. Jika lebih kecil → geser ke kanan
-// 5. Jika lebih besar → geser ke kiri
+// 4. Jika lebih kecil > geser ke kanan
+// 5. Jika lebih besar > geser ke kiri
 // 6. Ulangi sampai ketemu atau tidak ditemukan
 
 void bubbleSort(Hewan *arr) {
@@ -188,7 +188,7 @@ int main() {
         else if(pil == 3) {
             string x;
             cout << "Nama: ";
-             cin.ignore();
+            cin.ignore();
             getline(cin, x);
             linearSearch(daftarHewan, x);
         }
