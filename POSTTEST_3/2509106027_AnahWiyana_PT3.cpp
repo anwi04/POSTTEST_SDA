@@ -12,73 +12,66 @@ struct Hewan {
     double harga;
 };
 
-struct Node {
-    Hewan data;
-    Node* next;
-};
-
 Hewan daftarHewan[MAX];
 int n = 0;
 
-Node* top = NULL;  
-Node* front = NULL;    
-Node* rear = NULL;    
+Hewan stack[MAX];
+int top = -1;
 
 void push(Hewan h){
-    Node* baru = new Node;
-    baru->data = h;
-    baru->next = top;
-    top = baru;
-
-    cout << h.nama << " masuk riwayat" << endl;
+    if(top >= MAX-1){
+        cout << "Stack overflow" << endl;
+    } else {
+        top++;
+        stack[top] = h;
+        cout << h.nama << " masuk riwayat" << endl;
+    }
 }
 
 void pop(){
-    if(top == NULL){
-        cout << "Stack kosong!" << endl;
-        return;
+    if(top < 0){
+        cout << "Stack underflow" << endl;
+    } else {
+        cout << "Hapus riwayat: " << stack[top].nama << endl;
+        top--;
     }
-
-    Node* hapus = top;
-    cout << "Hapus: " << hapus->data.nama << endl;
-
-    top = top->next;
-    delete hapus;
 }
 
 void peekStack(){
-    if(top == NULL){
+    if(top < 0){
         cout << "Stack kosong" << endl;
     } else {
-        cout << "Terakhir: " << top->data.nama << endl;
+        cout << "Tindakan terakhir: " << stack[top].nama << endl;
     }
 }
 
 void tampilStack(){
-    if(top == NULL){
+    if(top < 0){
         cout << "Riwayat kosong" << endl;
         return;
     }
-
-    Node* temp = top;
-    while(temp != NULL){
-        cout << temp->data.id << " | " << temp->data.nama << endl;
-        temp = temp->next;
+    for(int i=top;i>=0;i--){
+        cout << (stack+i)->id << " | " << (stack+i)->nama << endl;
     }
 }
 
+Hewan queue[MAX];
+int front = -1, rear = -1;
+
+bool isFull(){
+    return rear == MAX-1;
+}
+
 void enqueue(Hewan h){
-    Node* baru = new Node;
-    baru->data = h;
-    baru->next = NULL;
-
-    if(front == NULL){
-        front = rear = baru;
-    } else {
-        rear->next = baru;
-        rear = baru;
+    if(isFull()){
+        cout << "Queue overflow" << endl;
+        return;
     }
-
+    if(front == -1){
+        front = 0;
+    }
+    rear++;
+    queue[rear] = h;
     cout << h.nama << " masuk antrian" << endl;
 }
 
@@ -86,44 +79,38 @@ Hewan dequeue(){
     Hewan kosong;
     kosong.id = -1;
 
-    if(front == NULL){
-        cout << "Queue kosong!" << endl;
+    if(front == -1 || front > rear){
+        cout << "Queue underflow" << endl;
         return kosong;
     }
 
-    Node* hapus = front;
-    Hewan h = hapus->data;
+    Hewan h = queue[front];
+    cout << "Dipanggil: " << h.nama << " (ID: " << h.id << ")" << endl;
 
-    cout << "Dipanggil: " << h.nama << endl;
+    front++;
 
-    front = front->next;
-    delete hapus;
-
-    if(front == NULL){
-        rear = NULL;
+    if(front > rear){
+        front = rear = -1;
     }
 
     return h;
 }
 
 void peekQueue(){
-    if(front == NULL){
-        cout << "Queue kosong" << endl;
+    if(front == -1 || front > rear){
+        cout << "Queue kosong\n";
     } else {
-        cout << "Terdepan: " << front->data.nama << endl;
+        cout << "Pasien terdepan: " << queue[front].nama << endl;
     }
 }
 
 void tampilQueue(){
-    if(front == NULL){
-        cout << "Antrian kosong" << endl;
+    if(front == -1 || front > rear){
+        cout << "Antrian kosong\n";
         return;
     }
-
-    Node* temp = front;
-    while(temp != NULL){
-        cout << temp->data.id << " | " << temp->data.nama << endl;
-        temp = temp->next;
+    for(int i=front;i<=rear;i++){
+        cout << (queue+i)->id << " | " << (queue+i)->nama << endl;
     }
 }
 
@@ -144,7 +131,7 @@ bool cekID(int id){
 
 void tambah(Hewan &h) {
 
-    if(n >= MAX){
+    if(n >= 50){
         cout << "Data penuh!" << endl;
         return;
     }
@@ -311,22 +298,22 @@ int main() {
         else if(pil == 5) {
             selectionSort(daftarHewan);
         }
-        else if(pil == 6){
+        else if(pil==6){
             int id;
             bool ketemu = false;
-            cout << "ID: ";
+            cout << "ID: "; 
             cin >> id;
             for(int i=0;i<n;i++){
                 if(daftarHewan[i].id == id){
                     enqueue(daftarHewan[i]);
                     ketemu = true;
                     break;
+                    }
+                }
+                if(!ketemu){
+                    cout << "ID tidak ditemukan!\n";
                 }
             }
-            if(!ketemu){
-                cout << "ID tidak ditemukan!" << endl;
-            }
-        }
             else if(pil==7){
                 Hewan h = dequeue();
                 if(h.id != -1){
